@@ -1,0 +1,104 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication2
+{
+    class Class1
+    {
+        private const int field = 9;
+        private int count;
+        private int[,,] array;
+
+        public void new_game_x1()
+        {
+            count = 1;
+            array = new int[count, field, field];
+        }
+
+        public void new_game_x5()
+        {
+            count = 5;
+            array = new int[count, field, field];
+        }
+
+        public bool check_x(int check, int i, int y, int x)
+        {
+            for(int x1 = 0; x1 < field; x1++)
+            {
+                if (array[i, y, x1] == check)
+                    return false;
+            }
+            for(int y1 = 0; y1 < field; y1++)
+            {
+                if (array[i, y1, x] == check)
+                    return false;
+            }
+            int y_min = y / 3;
+            int x_min = x / 3;
+            int y_max;
+            int x_max;
+            x_max = x_min == 0 ? 3 : (x_min == 1 ? 6 : 9);
+            y_max = y_min == 0 ? 3 : (y_min == 1 ? 6 : 9);
+            for(;y_min < y_max; ++y_min)
+            {
+                for (; x_min < x_max; ++x_min)
+                {
+                    if (array[i, y_min, x_min] == check)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        public void random_game()
+        {
+            Random random = new Random();
+            for (int i = 0; i < count;++i)
+            {
+                if(i == 4)
+                {
+                    int up_left = 0, up_right = 1, down_left = 2, down_right = 3;
+                    for (int y_down = 6, y_up = 0; y_down < field; ++y_up, ++y_down)
+                    {
+                        for (int x_right = 6, x_left = 0; x_right < field; ++x_left, ++x_right)
+                        {
+                            array[i, y_up, x_left] = array[up_left, y_down, x_right];
+                            array[i, y_up, x_right] = array[up_right, y_down, x_left];
+                            array[i, y_down, x_left] = array[down_left, y_up, x_right];
+                            array[i, y_down, x_right] = array[down_right, y_up, x_left];
+                        }
+                    }
+                }
+                for (int y = 0; y < field; ++y)
+                {
+                    for (int x = 0; x < field;)
+                    {
+                        if (i != 4 && y < 3 && x < 3 || 
+                            i != 4 && y > 5 && x > 5)
+                        {
+                            int tmp_rand = random.Next(1, 9);
+                            if (check_x(tmp_rand, i, y, x))
+                            {
+                                ++x;
+                                array[i, y, x] = tmp_rand;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public int[,,] get() 
+        {
+            return array;
+        }
+
+        public void set(int tmp, int i, int y, int x)
+        {
+            array[i, y, x] = tmp;
+        }
+    }
+}
