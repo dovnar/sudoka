@@ -100,5 +100,21 @@ namespace ConsoleApplication2
         {
             array[i, y, x] = tmp;
         }
+        public void rand_open(int[,,] arr, int i, int max_count)
+        {
+        for(int j = 0, int count = 0; j < i; ++count)
+        {
+         Random random = new Random();
+         int y = random.Next(0, 8);
+         int x = random.Next(0, 8);
+         
+         arr[j,y,x] = array[j,y,x];
+         
+         if(max_count == count)
+         {
+            ++j;
+            count = 0;
+         }
+       }
     }
 }
